@@ -1,0 +1,79 @@
+# Função para gerar a média de 4 notas aleatórias de um aluno
+def gerar_media_aluno(nome_aluno):
+    notas = [random.uniform(0.0, 10.0) for _ in range(4)]
+    media = sum(notas) / 4
+    print(f"Aluno: {nome_aluno}, Notas: {['{:.2f}'.format(n) for n in notas]}, Média: {media:.2f}")
+    return media, nome_aluno
+
+# Função para calcular a média da sala
+def calcular_media_sala(qtd_alunos, nome_sala):
+    medias_alunos = []
+    maior_media = -1
+    nome_maior_media = ""
+
+    for i in range(qtd_alunos):
+        while True:
+            nome_aluno = input(f"Digite o nome do aluno {i+1} da {nome_sala}: ").strip()
+            if nome_aluno:
+                break
+            print("Nome do aluno não pode ser vazio. Tente novamente.")
+
+        media_aluno, nome_aluno = gerar_media_aluno(nome_aluno)
+        medias_alunos.append(media_aluno)
+
+        if media_aluno > maior_media:
+            maior_media = media_aluno
+            nome_maior_media = nome_aluno
+
+    media_sala = sum(medias_alunos) / qtd_alunos
+    print(f"\nMaior média da {nome_sala}: {maior_media:.2f} ({nome_maior_media})\n")
+    return media_sala
+
+# Função principal
+def main():
+    escola = input("Digite o nome da escola: ").strip()
+
+    # Garantir que o número de salas seja maior que zero
+    while True:
+        try:
+            qtd_salas = int(input("Digite a quantidade de salas da escola: "))
+            if qtd_salas > 0:
+                break
+            print("A quantidade de salas deve ser maior que zero.")
+        except ValueError:
+            print("Digite um número inteiro válido.")
+
+    medias_escola = [0.0] * qtd_salas
+    maior_media_sala = -1
+    nome_maior_sala = ""
+
+    for i in range(qtd_salas):
+        nome_sala = f"Sala {i+1}"
+
+        # Garantir que o número de alunos seja maior que zero
+        while True:
+            try:
+                qtd_alunos = int(input(f"Digite a quantidade de alunos da {nome_sala}: "))
+                if qtd_alunos > 0:
+                    break
+                print("A quantidade de alunos deve ser maior que zero.")
+            except ValueError:
+                print("Digite um número inteiro válido.")
+
+        media_sala = calcular_media_sala(qtd_alunos, nome_sala)
+        medias_escola[i] = media_sala
+
+        if media_sala > maior_media_sala:
+            maior_media_sala = media_sala
+            nome_maior_sala = nome_sala
+
+    media_geral_escola = sum(medias_escola) / qtd_salas
+
+    print(f"\n===== RESUMO FINAL =====")
+    print(f"Escola: {escola}")
+    print(f"Sala com maior média: {nome_maior_sala} ({maior_media_sala:.2f})")
+    print(f"Média geral da escola: {media_geral_escola:.2f}")
+
+# Executa o programa
+if __name__ == "__main__":
+    main()
